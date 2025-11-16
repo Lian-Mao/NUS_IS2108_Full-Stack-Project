@@ -113,8 +113,8 @@
                         }]
                     },
                     options :{
-                        responsive: true,             // MUST be true
-                        maintainAspectRatio: false,   // MUST be false
+                        responsive: true,             
+                        maintainAspectRatio: false,   
                         scales: { y: { beginAtZero: true } },
                     },
                     plugins :{
@@ -131,7 +131,6 @@
 
     });
 
-    // Search functionality with URL parameters (similar to customer products page)
     function initializeSearch() {
         const searchInput = document.getElementById('search-input');
         if (!searchInput) return;
@@ -142,10 +141,9 @@
             clearTimeout(searchTimeout);
             searchTimeout = setTimeout(() => {
                 performSearch();
-            }, 500); // 500ms delay for server requests
+            }, 500);
         });
         
-        // Handle enter key
         searchInput.addEventListener('keypress', function(e) {
             if (e.key === 'Enter') {
                 e.preventDefault();
@@ -165,7 +163,7 @@
             currentUrl.searchParams.delete('search');
         }
         
-        // Reset to first page when searching
+
         currentUrl.searchParams.delete('page');
         
         window.location.href = currentUrl.toString();

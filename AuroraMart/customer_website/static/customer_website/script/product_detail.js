@@ -56,7 +56,7 @@ function toggleWishlist(event) {
     const isInWishlist = wishlistBtn.classList.contains('in-wishlist');
     
     const url = new URL(window.location.href);
-    url.searchParams.set('sku', sku);
+    url.searchParams.set('sku', encodeURIComponent(sku));
     
     if (isInWishlist) {
         url.searchParams.set('remove_from_wishlist', 'true');

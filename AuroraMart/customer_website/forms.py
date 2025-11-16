@@ -1,6 +1,7 @@
 import re
 from django.contrib.auth.forms import AuthenticationForm
 from django import forms
+from django.utils import timezone
 from admin_panel.models import Category,Product,Order,OrderItem, Review
 from customer_website.models import Customer
 from AuroraMart.models import User
@@ -66,12 +67,10 @@ class CustomerSignupForm(forms.Form):
     def clean_username(self):
         username = self.cleaned_data.get('username')
         if username:
-            # Check format first
             username_status = check_username(username)
             if username_status != "Valid":
                 raise forms.ValidationError(username_status)
             
-            # Check if username already exists
             if Customer.objects.filter(username=username).exists():
                 raise forms.ValidationError("This username is already taken. Please choose a different one.")
         
@@ -107,7 +106,7 @@ class CustomerForm(forms.ModelForm):
         if 'occupation' in self.fields:
             self.fields['occupation'].widget.choices = [('', 'Select Occupation')] + list(self.fields['occupation'].choices)[1:]
         if 'number_of_children' in self.fields:
-            pass  # No choices needed for number input
+            pass  
                 
         self.fields['age'].widget.attrs.update({'placeholder': 'Enter your age'})
         self.fields['household_size'].widget.attrs.update({'placeholder': 'Number of people in household'})
@@ -142,7 +141,6 @@ class CustomerForm(forms.ModelForm):
 
 
 class CheckoutForm(forms.Form):
-    # Shipping Information
     first_name = forms.CharField(
         max_length=100,
         widget=forms.TextInput(attrs={
@@ -227,7 +225,6 @@ class CheckoutForm(forms.Form):
         })
     )
     
-    # Payment Information
     PAYMENT_METHOD_CHOICES = [
         ('credit_card', 'Credit Card'),
     ]
@@ -240,7 +237,6 @@ class CheckoutForm(forms.Form):
         initial='credit_card'
     )
     
-    # Credit Card Fields
     card_number = forms.CharField(
         max_length=19,
         required=False,
@@ -277,7 +273,6 @@ class CheckoutForm(forms.Form):
         })
     )
     
-    # Coupon Code
     coupon_code = forms.CharField(
         max_length=50,
         required=False,
@@ -288,7 +283,7 @@ class CheckoutForm(forms.Form):
         })
     )
     
-    # Order Notes
+
     order_notes = forms.CharField(
         required=False,
         widget=forms.Textarea(attrs={
@@ -298,7 +293,7 @@ class CheckoutForm(forms.Form):
         })
     )
     
-    # Terms and Conditions
+
     accept_terms = forms.BooleanField(
         required=True,
         widget=forms.CheckboxInput(attrs={
@@ -319,7 +314,7 @@ class CheckoutForm(forms.Form):
     def clean_phone(self):
         phone = self.cleaned_data.get('phone')
         if phone:
-            # Remove all non-digit characters for validation
+
             phone_digits = re.sub(r'\D', '', phone)
             if len(phone_digits) < 8:
                 raise forms.ValidationError('Please enter a valid phone number.')
@@ -333,7 +328,6 @@ class CheckoutForm(forms.Form):
             if not card_number:
                 raise forms.ValidationError('Card number is required for credit card payment.')
             
-            # Remove spaces for validation
             card_digits = card_number.replace(' ', '')
             
             if not card_digits.isdigit():
@@ -434,8 +428,7 @@ class CheckoutForm(forms.Form):
                 if not coupon.is_active:
                     raise forms.ValidationError('This coupon is not active.')
                 
-                from django.utils import timezone
-                # Use localdate() so validation compares dates in the project's timezone
+
                 now = timezone.localdate()
                 if not (coupon.valid_from <= now <= coupon.valid_until):
                     raise forms.ValidationError('This coupon is not valid at this time.')
@@ -480,10 +473,8 @@ class ForgotPasswordForm(forms.Form):
     
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
-        # Make email required if it's in the POST data
         if self.data and self.data.get('email'):
             self.fields['email'].required = True
-            # Make username readonly
             self.fields['username'].widget.attrs['readonly'] = True
     
     def clean_username(self):
@@ -539,7 +530,6 @@ class ForgotPasswordForm(forms.Form):
     def clean_username(self):
         username = self.cleaned_data.get('username')
         if username:
-            # Check if username exists
             if not Customer.objects.filter(username=username).exists():
                 raise forms.ValidationError("No account found with this username.")
         return username
@@ -549,9 +539,7 @@ class ForgotPasswordForm(forms.Form):
         username = cleaned_data.get('username')
         email = cleaned_data.get('email')
         
-        # Only validate email if it's provided
         if username and email:
-            # Check if username and email match
             try:
                 customer = Customer.objects.get(username=username)
             except Customer.DoesNotExist:

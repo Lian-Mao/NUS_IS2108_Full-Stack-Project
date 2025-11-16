@@ -1,7 +1,7 @@
 let modifiedItems = new Set();
 
 function increaseQuantity(sku) {
-    const input = document.getElementById('qty-' + sku);
+    const input = document.getElementById('qty-' +encodeURIComponent(sku));
     const currentValue = parseInt(input.value);
     if (currentValue < 99) {
         input.value = currentValue + 1;
@@ -10,7 +10,7 @@ function increaseQuantity(sku) {
 }
 
 function decreaseQuantity(sku) {
-    const input = document.getElementById('qty-' + sku);
+    const input = document.getElementById('qty-' +encodeURIComponent(sku));
     const currentValue = parseInt(input.value);
     if (currentValue > 1) {
         input.value = currentValue - 1;
@@ -19,7 +19,7 @@ function decreaseQuantity(sku) {
 }
 
 function markChanged(sku) {
-    const input = document.getElementById('qty-' + sku);
+    const input = document.getElementById('qty-' +encodeURIComponent(sku));
     const originalValue = parseInt(input.dataset.original);
     const currentValue = parseInt(input.value);
 
@@ -46,7 +46,7 @@ function saveChanges() {
     url.searchParams.set('bulk_update', 'true');
 
     modifiedItems.forEach(sku => {
-        const input = document.getElementById('qty-' + sku);
+        const input = document.getElementById('qty-' +encodeURIComponent(sku));
         url.searchParams.set('qty_' + sku, input.value);
     });
 
@@ -61,7 +61,7 @@ function clearCart() {
 
 function removeItem(sku, productName) {
     if (confirm('Are you sure you want to remove "' + productName + '" from your cart?')) {
-        window.location.href = '/cart/?remove_sku=' + sku;
+        window.location.href = '/cart/?remove_sku=' + encodeURIComponent(sku)
     }
 }
 

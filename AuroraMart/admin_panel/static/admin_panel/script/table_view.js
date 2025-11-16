@@ -108,7 +108,6 @@ document.addEventListener('DOMContentLoaded', function () {
     updateActionButtons();
 });
 
-// Debounce helper
 function debounce(fn, delay) {
     let timer;
     return function(...args) {
@@ -117,7 +116,7 @@ function debounce(fn, delay) {
     };
 }
 
-// Live search: update URL after 500ms idle, preserve type/rows/sort, reset to page 1
+
 document.addEventListener('DOMContentLoaded', function() {
     const searchInput = document.getElementById('searchInput');
     if (!searchInput) return;
@@ -131,8 +130,7 @@ document.addEventListener('DOMContentLoaded', function() {
             } else {
                 url.searchParams.delete('search');
             }
-            url.searchParams.set('page', '1'); // reset to first page
-            // navigate to updated URL
+            url.searchParams.set('page', '1'); 
             window.location.href = url.toString();
         } catch (e) {
             console.error('Search navigation failed', e);
@@ -148,7 +146,6 @@ function categoryChanged(value) {
     if (!realSelect) return;
     realSelect.innerHTML = '<option value="">Select a subcategory (optional)</option>';
 
-    // Update URL query param 'category' (preserve other params)
     (function updateUrlCategoryParam(catId) {
         try {
             const url = new URL(window.location.href);
@@ -157,7 +154,6 @@ function categoryChanged(value) {
             } else {
                 url.searchParams.delete('category');
             }
-            // update URL and reload so server-side form reads the category and re-populates subcategories
             window.history.replaceState({}, document.title, url.pathname + url.search);
             window.location.reload();
         } catch (e) {
@@ -172,7 +168,6 @@ function updateSort(value) {
     window.location.href = url.toString();
 }
 
-// When coupon selection changes in the modal form, update URL and reload
 function couponChanged(couponId) {
     try {
         const url = new URL(window.location.href);
@@ -181,7 +176,6 @@ function couponChanged(couponId) {
         } else {
             url.searchParams.delete('coupon');
         }
-        // replace history and reload so server repopulates dependent selects
         window.history.replaceState({}, document.title, url.pathname + url.search);
         window.location.reload();
     } catch (e) {
@@ -189,7 +183,6 @@ function couponChanged(couponId) {
     }
 }
 
-// Attach listener to coupon select if present inside modal form
 document.addEventListener('DOMContentLoaded', function() {
     const couponSelect = document.querySelector('#modalForm select[name="coupon"], #modalForm #id_coupon');
     if (couponSelect) {

@@ -1,4 +1,4 @@
-// Function to dismiss alerts
+
 function dismissAlert(button) {
     const alert = button.closest('.alert');
     if (alert) {

@@ -54,8 +54,6 @@
             </div>
 
             <div class="profile-content">
-
-                <!-- Order History Section -->
                 <div class="order-history-section">
                     <div class="order-history-header">
                         <h2>Order History</h2>
@@ -75,7 +73,6 @@
                         <div class="orders-container">
                             {% for order in customer_orders %}
                             <div class="order-card">
-                                <!-- Order Header -->
                                 <div class="order-header">
                                     <div class="order-info">
                                         <h3 class="order-id">Order #{{ order.order_id }}</h3>
@@ -86,7 +83,6 @@
                                     </div>
                                 </div>
                                 
-                                <!-- Order Items -->
                                 <div class="order-items">
                                     {% for item in order.processed_items %}
                                     <div class="order-item">
@@ -208,8 +204,6 @@
                                     {% endfor %}
                                 </div>
 
-                                
-                                <!-- Order Total -->
                                 <div class="order-footer" id="coupons">
                                     <div class="order-total">
                                         <span class="total-label">Order Total:</span>
